@@ -1,0 +1,415 @@
+<div class="table-responsive mb-0">
+  <table class="table table-centered table-nowrap">
+    <thead class="table-light">
+      <tr>
+        <th style="width: 20px">
+          <div class="form-check font-size-16 align-middle">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="transactionCheck01"
+            />
+            <label class="form-check-label" for="transactionCheck01"></label>
+          </div>
+        </th>
+        <th class="align-middle">MÃ ĐƠN HÀNG</th>
+        <th class="align-middle">NGƯỜI MUA</th>
+        <th class="align-middle">NGÀY MUA</th>
+        <th class="align-middle">TỔNG TIỀN</th>
+        <th class="align-middle">THANH TOÁN</th>
+        <th class="align-middle">PHƯƠNG THỨC THANH TOÁN</th>
+        <th class="align-middle">TÌNH TRẠNG</th>
+        <th class="align-middle">HOẠT ĐỘNG</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-template #noData>
+        <tr>
+          <td colspan="9" class="text-center">
+            <lord-icon
+              src="https://cdn.lordicon.com/msoeawqm.json"
+              trigger="loop"
+              colors="primary:#405189,secondary:#0ab39c"
+              style="width: 72px; height: 72px"
+            >
+            </lord-icon>
+            <h5 class="mt-4">Sorry! No Result Found</h5>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-container *ngIf="orders?.length; else noData">
+        <tr *ngFor="let data of orders">
+          <td>
+            <div class="form-check font-size-16">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="transactionCheck{{ data.index }}"
+              />
+              <label
+                class="form-check-label"
+                for="transactionCheck{{ data.index }}"
+              ></label>
+            </div>
+          </td>
+          <td>
+            <a href="javascript: void(0);" class="text-body fw-bold">{{
+              data.id
+            }}</a>
+          </td>
+          <td>{{ data.name }}</td>
+          <td>{{ data.date }}</td>
+          <td>{{ data.total }}</td>
+          <td>
+            <span
+              class="badge badge-pill badge-soft-success font-size-11"
+              [ngClass]="{
+                'badge-soft-danger': data.status === 'Chưa thanh toán'
+              }"
+              >{{ data.status }}</span
+            >
+          </td>
+          <td>
+            <i :class="`fab ${data.payment[0]} mr-1`"></i>
+            {{ data.payment[1] }}
+          </td>
+          <td class="status">
+            <span
+              class="badge badge-soft-warning text-uppercase"
+              [ngClass]="{
+                'badge-soft-danger': data.statusOrder === 'Chờ duyệt'
+              }"
+            >
+              {{ data.statusOrder }}</span
+            >
+          </td>
+          <td>
+            <ul class="list-inline hstack gap-2 mb-0">
+              <li
+                class="list-inline-item"
+                data-bs-toggle="tooltip"
+                data-bs-trigger="hover"
+                data-bs-placement="top"
+                title="View"
+              >
+                <a
+                  *ngIf="data.statusOrder === 'Chờ duyệt'"
+                  (click)="openModal(content1)"
+                  class="text-primary d-inline-block"
+                >
+                  <i class="mdi mdi-eye font-size-20"></i>
+                </a>
+                <a
+                  *ngIf="data.statusOrder === 'Đang giao'"
+                  (click)="openModal(content)"
+                  class="text-primary d-inline-block"
+                >
+                  <i class="mdi mdi-eye font-size-20"></i>
+                </a>
+              </li>
+              <li
+                class="list-inline-item"
+                data-bs-toggle="tooltip"
+                data-bs-trigger="hover"
+                data-bs-placement="top"
+                title="Edit"
+              >
+                <a class="text-primary d-inline-block">
+                  <i class="mdi mdi-lead-pencil font-size-20"></i>
+                </a>
+              </li>
+              <li
+                class="list-inline-item"
+                data-bs-toggle="tooltip"
+                data-bs-trigger="hover"
+                data-bs-placement="top"
+                title="Remove"
+              >
+                <a class="text-primary d-inline-block">
+                  <i class="mdi mdi-trash-can font-size-20 text-danger"></i>
+                </a>
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+
+  <ng-template #content role="document" let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title mt-0">Chi tiết đơn hàng</h5>
+      <button
+        type="button"
+        class="btn-close"
+        aria-hidden="true"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="card-body">
+      <div class="text-center">
+        <lord-icon
+          src="https://cdn.lordicon.com/uetqnvvg.json"
+          trigger="loop"
+          colors="primary:#4b38b3,secondary:#0ab39c"
+          style="width: 80px; height: 80px"
+        ></lord-icon>
+        <h5 class="fs-16 mt-2">Đơn hàng đang được giao</h5>
+        <p class="text-muted mb-0">ID: MFDS1400457854</p>
+        <p class="text-muted mb-0">Phương thức thanh toán : Mastercard</p>
+      </div>
+    </div>
+    <div class="modal-body">
+      <p class="mb-2">
+        Mã đơn hàng:
+        <span class="text-primary">#SK2540</span>
+      </p>
+      <p class="mb-2">
+        Người mua:
+        <span class="text-primary">Vũ Tiến Long</span>
+      </p>
+      <p class="mb-2">
+        Số điện thoại:
+        <span class="text-primary">0392133732</span>
+      </p>
+      <p class="mb-4">
+        Địa chỉ:
+        <span class="text-primary"
+          >Số 1 Yên Lạc, Vĩnh Tuy, Hai Bà Trưng, Hà Nội</span
+        >
+      </p>
+      <div class="table-responsive">
+        <table class="table table-centered table-nowrap">
+          <thead>
+            <tr>
+              <th scope="col">Sản phẩm</th>
+              <th scope="col">Tên sản phẩm</th>
+              <th scope="col">Giá</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">
+                <div>
+                  <img
+                    src="../../../../assets/images/product/13.webp"
+                    alt
+                    class="img-fluid"
+                    style="max-width: 100px"
+                  />
+                </div>
+              </th>
+              <td>
+                <div>
+                  <h5 class="text-truncate font-size-14">
+                    Áo Polo Thể Thao Nữ Phối Màu
+                  </h5>
+                  <p class="text-muted mb-0">Màu: <strong>Hồng</strong></p>
+                  <p class="text-muted mb-3">Size: <strong>L</strong></p>
+                  <p class="text-muted mb-0">120,000đ x 2</p>
+                </div>
+              </td>
+              <td>240,000đ</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <div>
+                  <img
+                    src="../../../../assets/images/product/1.webp"
+                    alt
+                    class="img-fluid"
+                    style="max-width: 100px"
+                  />
+                </div>
+              </th>
+              <td>
+                <div>
+                  <h5 class="text-truncate font-size-14">
+                    Áo Polo Thể Thao Nữ Phối Màu
+                  </h5>
+                  <p class="text-muted mb-0">Màu: <strong>Cam</strong></p>
+                  <p class="text-muted mb-3">Size: <strong>XL</strong></p>
+                  <p class="text-muted mb-0">149,000đ x 2</p>
+                </div>
+              </td>
+              <td>298,000đ</td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <h6 class="m-0 text-end">Thành tiền:</h6>
+              </td>
+              <td>538,000đ</td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <h6 class="m-0 text-end">Voucher:</h6>
+              </td>
+              <td>(SALE66) <br />-21,000đ</td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <h6 class="m-0 text-end">Phí vận chuyển:</h6>
+              </td>
+              <td>Free</td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <h6 class="m-0 text-end">Tổng:</h6>
+              </td>
+              <td>517,000đ</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-success">
+        <i class="mdi mdi-printer font-size-14 me-2"></i>
+        In
+      </button>
+      <button class="btn btn-secondary" (click)="modal.close('Close click')">
+        Close
+      </button>
+    </div>
+  </ng-template>
+  <ng-template #content1 role="document" let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title mt-0">Chi tiết đơn hàng</h5>
+      <button
+        type="button"
+        class="btn-close"
+        aria-hidden="true"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="card-body">
+      <div class="text-center">
+        <lord-icon
+          src="https://cdn.lordicon.com/slkvcfos.json"
+          trigger="loop"
+          colors="primary:#4b38b3,secondary:#0ab39c"
+          style="width: 80px; height: 80px"
+        ></lord-icon>
+        <h5 class="fs-16 mt-2">Đơn hàng đang chờ duyệt</h5>
+        <p class="text-muted mb-0">ID: MFDS1400457854</p>
+        <p class="text-muted mb-0">
+          Phương thức thanh toán : Thanh toán khi nhận hàng
+        </p>
+      </div>
+    </div>
+    <div class="modal-body">
+      <p class="mb-2">
+        Mã đơn hàng:
+        <span class="text-primary">#SK2539</span>
+      </p>
+      <p class="mb-2">
+        Người mua:
+        <span class="text-primary">Nguyễn Thị Linh</span>
+      </p>
+      <p class="mb-2">
+        Số điện thoại:
+        <span class="text-primary">0342516587</span>
+      </p>
+      <p class="mb-4">
+        Địa chỉ:
+        <span class="text-primary"
+          >116 Đường Phạm Đức Sơn, Phường 16, Quận 8, Thành phố Hồ Chí
+          Minh</span
+        >
+      </p>
+      <div class="table-responsive">
+        <table class="table table-centered table-nowrap">
+          <thead>
+            <tr>
+              <th scope="col">Sản phẩm</th>
+              <th scope="col">Tên sản phẩm</th>
+              <th scope="col">Giá</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">
+                <div>
+                  <img
+                    src="../../../../assets/images/product/7.webp"
+                    alt
+                    class="img-fluid"
+                    style="max-width: 100px"
+                  />
+                </div>
+              </th>
+              <td>
+                <div>
+                  <h5 class="text-truncate font-size-14">
+                    Áo Polo Thể Thao Nữ Phối Màu
+                  </h5>
+                  <p class="text-muted mb-0">Màu: <strong>Hồng</strong></p>
+                  <p class="text-muted mb-3">Size: <strong>L</strong></p>
+                  <p class="text-muted mb-0">120,000đ x 2</p>
+                </div>
+              </td>
+              <td>240,000đ</td>
+            </tr>
+            <tr>
+              <th scope="row">
+                <div>
+                  <img
+                    src="../../../../assets/images/product/1.1.webp"
+                    alt
+                    class="img-fluid"
+                    style="max-width: 100px"
+                  />
+                </div>
+              </th>
+              <td>
+                <div>
+                  <h5 class="text-truncate font-size-14">
+                    Áo Polo Thể Thao Nữ Phối Màu
+                  </h5>
+                  <p class="text-muted mb-0">Màu: <strong>Cam</strong></p>
+                  <p class="text-muted mb-3">Size: <strong>XL</strong></p>
+                  <p class="text-muted mb-0">149,000đ x 2</p>
+                </div>
+              </td>
+              <td>298,000đ</td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <h6 class="m-0 text-end">Thành tiền:</h6>
+              </td>
+              <td>538,000đ</td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <h6 class="m-0 text-end">Voucher:</h6>
+              </td>
+              <td>(SALE66) <br />-21,000đ</td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <h6 class="m-0 text-end">Phí vận chuyển:</h6>
+              </td>
+              <td>Free</td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <h6 class="m-0 text-end">Tổng:</h6>
+              </td>
+              <td>517,000đ</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button (click)="printPage()" class="btn btn-success">
+        <i class="mdi mdi-printer font-size-14 me-2"></i>
+        In
+      </button>
+      <button class="btn btn-secondary" (click)="modal.close('Close click')">
+        Close
+      </button>
+    </div>
+  </ng-template>
+</div>
+<!-- end table -->
